@@ -1,0 +1,2 @@
+quart~=0.18.0
+hypercorn~=0.13.2
