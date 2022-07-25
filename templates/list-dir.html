@@ -1,10 +1,33 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh">
 <head>
     <meta charset="UTF-8">
-    <title>小米多亲市场</title>
+    <title>小米多亲市场: {{ short_name }}</title>
+    <style>
+        .menu *{
+            margin: 0px  6px  0px  6px
+        }
+        .menu *:first-child{
+            margin: 0px  6px  0px  0px
+        }
+        .menu *:last-child{
+            margin: 0px  0px  0px  6px
+        }
+    </style>
 </head>
 <body>
-    <h2>小米多亲市场</h2>
+    <p>当前位置: {{ path_name }}</p>
+    <p class="menu">
+        <button type="button">上传文件</button>
+        <button type="button">新建目录</button>
+    </p>
+    <table cellpadding="10">
+        <tr><th>文件名</th><th>创建日期</th><th>大小</th><th>操作</th></tr>
+        {% for file in files %}
+            {% if file['isfile'] %}<tr><td>{{ file['name'] }}</td><td>{{ file['date'] }}</td><td>{{ file['size'] }}</td><td>删除</td></tr>
+            {% else %}<tr><td>{{ file['name'] }}</td><td>{{ file['date'] }}</td><td></td><td>删除</td></tr>
+            {% endif %}
+        {% endfor %}
+    </table>
 </body>
 </html>

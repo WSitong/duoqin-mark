@@ -1,6 +1,7 @@
 import os.path
 from quart import Quart, render_template, abort, send_file, request
 import config
+import utils
 
 app = Quart(__name__)
 
@@ -18,8 +19,18 @@ async def list_file_path(file_path: str | None = None):
     if os.path.isfile(full_path):
         return await send_file(full_path, conditional=True)
     else:
-        path_name = '/' if file_path is None else os.path.basename(file_path)
-        return f'{path_name} is a directory'
+        short_name = '/' if file_path is None else os.path.basename(file_path)
+        path_name = '/' if file_path is None else file_path
+        files = []
+        for file_name in os.listdir(full_path):
+            full_file_path = os.path.join(full_path, file_name)
+            files.append({
+                'name': file_name,
+                'isfile': os.path.isfile(full_file_path),
+                'date': utils.format_time(os.path.getmtime(full_file_path)),
+                'size': utils.format_size(os.path.getsize(full_file_path)),
+            })
+        return await render_template('list-dir.html', path_name=path_name, short_name=short_name, files=files)
 
 
 if __name__ == '__main__':
